@@ -9,7 +9,7 @@ This repository contains the **BioDWH2-ArcadeDB-Server** utility which can be us
 The latest release version of **BioDWH2-ArcadeDB-Server** can be downloaded [here](https://github.com/BioDWH2/BioDWH2-ArcadeDB-Server/releases/latest).
 
 ## Usage
-BioDWH2-ArcadeDB-Server requires the Java Runtime Environment. The JRE 8 is available [here](https://www.oracle.com/java/technologies/javase-jre8-downloads.html).
+BioDWH2-ArcadeDB-Server requires the Java Runtime Environment 11+. The JRE 11 archive is available [here](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html).
 
 Creating a database from any workspace is done using the following command. Every time the workspace is updated or changed, the create command has to be executed again.
 ~~~BASH
@@ -29,6 +29,5 @@ Usage: BioDWH2-ArcadeDB-Server.jar [-h] [-c <workspacePath>] [-cs <workspacePath
   -s, --start <workspacePath>           Start an ArcadeDB server for the workspace
   -c, --create <workspacePath>          Create an ArcadeDB database from the workspace graph
   -cs, --create-start <workspacePath>   Create and start an ArcadeDB database from the workspace graph
-  -p, --port <port>                     Specifies the ArcadeDB server port(-range) (default 2424-2430)
-  -sp, --studio-port <studioPort>       Specifies the ArcadeDB Studio port(-range) (default 2480-2490)
+  -p, --port <port>                     Specifies the ArcadeDB server port(-range) (default 2480-2489)
 ~~~
