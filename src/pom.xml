@@ -94,7 +94,7 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>4.6.2</version>
+            <version>4.6.3</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -104,7 +104,12 @@
         <dependency>
             <groupId>com.arcadedb</groupId>
             <artifactId>arcadedb-server</artifactId>
-            <version>21.11.1</version>
+            <version>22.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.arcadedb</groupId>
+            <artifactId>arcadedb-graphql</artifactId>
+            <version>22.2.1</version>
         </dependency>
     </dependencies>
 
