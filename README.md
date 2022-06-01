@@ -16,7 +16,7 @@ Creating a database from any workspace is done using the following command. Ever
 > java -jar BioDWH2-ArcadeDB-Server.jar --create /path/to/workspace
 ~~~
 
-Once the database has been created, the database and OrientDB Studio can be started as follows:
+Once the database has been created, the database and ArcadeDB Studio can be started as follows:
 ~~~BASH
 > java -jar BioDWH2-ArcadeDB-Server.jar --start /path/to/workspace
 ~~~
