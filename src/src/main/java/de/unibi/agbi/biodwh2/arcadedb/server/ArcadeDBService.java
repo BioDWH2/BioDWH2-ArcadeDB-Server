@@ -255,7 +255,7 @@ public class ArcadeDBService {
     }
 
     public void openBrowser() {
-        final int port = 2480; // TODO
+        final int port = server.getHttpServer().getPort();
         try {
             Desktop.getDesktop().browse(new URI("http://localhost:" + port + "/"));
         } catch (IOException | URISyntaxException e) {
