@@ -8,10 +8,7 @@ import com.arcadedb.graph.MutableEdge;
 import com.arcadedb.graph.MutableVertex;
 import com.arcadedb.graph.Vertex;
 import com.arcadedb.index.lsm.LSMTreeIndexAbstract;
-import com.arcadedb.schema.EdgeType;
-import com.arcadedb.schema.Schema;
-import com.arcadedb.schema.Type;
-import com.arcadedb.schema.VertexType;
+import com.arcadedb.schema.*;
 import com.arcadedb.server.ArcadeDBServer;
 import de.unibi.agbi.biodwh2.core.model.graph.Edge;
 import de.unibi.agbi.biodwh2.core.model.graph.Graph;
@@ -35,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * https://docs.arcadedb.com/#Embed-Server
+ * <a href="https://docs.arcadedb.com/#Embed-Server">ArcadeDB Embedded Server</a>
  */
 public class ArcadeDBService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArcadeDBService.class);
@@ -240,6 +237,13 @@ public class ArcadeDBService {
             LOGGER.info("Creating indices...");
         final IndexDescription[] indices = graph.indexDescriptions();
         for (final IndexDescription index : indices) {
+            if (index.isArrayProperty()) {
+                if (LOGGER.isInfoEnabled())
+                    LOGGER.info("Skipping " + index.getType() + " index creation on '" + index.getProperty() +
+                                "' field for " + index.getTarget() + " label '" + index.getLabel() +
+                                "' as array indices are not yet supported by ArcadeDB");
+                continue;
+            }
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("Creating " + index.getType() + " index on '" + index.getProperty() + "' field for " +
                             index.getTarget() + " label '" + index.getLabel() + "'...");
