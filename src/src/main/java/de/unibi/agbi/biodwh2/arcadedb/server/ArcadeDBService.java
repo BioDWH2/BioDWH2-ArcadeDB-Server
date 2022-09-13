@@ -7,6 +7,7 @@ import com.arcadedb.database.RID;
 import com.arcadedb.graph.MutableEdge;
 import com.arcadedb.graph.MutableVertex;
 import com.arcadedb.graph.Vertex;
+import com.arcadedb.index.IndexException;
 import com.arcadedb.index.lsm.LSMTreeIndexAbstract;
 import com.arcadedb.schema.*;
 import com.arcadedb.server.ArcadeDBServer;
@@ -270,9 +271,14 @@ public class ArcadeDBService {
                 LOGGER.info("Creating " + index.getType() + " index on '" + index.getProperty() + "' field for " +
                             index.getTarget() + " label '" + index.getLabel() + "'...");
             final boolean isUnique = index.getType() == IndexDescription.Type.UNIQUE;
-            db.getSchema().createTypeIndex(Schema.INDEX_TYPE.LSM_TREE, isUnique, index.getLabel(),
-                                           new String[]{index.getProperty()}, LSMTreeIndexAbstract.DEF_PAGE_SIZE,
-                                           LSMTreeIndexAbstract.NULL_STRATEGY.SKIP, null);
+            try {
+                db.getSchema().createTypeIndex(Schema.INDEX_TYPE.LSM_TREE, isUnique, index.getLabel(),
+                                               new String[]{index.getProperty()}, LSMTreeIndexAbstract.DEF_PAGE_SIZE,
+                                               LSMTreeIndexAbstract.NULL_STRATEGY.SKIP, null);
+            } catch (IndexException e) {
+                LOGGER.warn("Error during " + index.getType() + " index creation on '" + index.getProperty() +
+                            "' field for " + index.getTarget() + " label '" + index.getLabel() + "'");
+            }
         }
     }
 

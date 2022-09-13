@@ -21,6 +21,10 @@ Once the database has been created, the database and ArcadeDB Studio can be star
 > java -jar BioDWH2-ArcadeDB-Server.jar --start /path/to/workspace
 ~~~
 
+By default, two users are created for ArcadeDB Studio:
+ * Username: `root`, Password: `biodwh2-arcadedb`
+ * Username: `biodwh2`, Password: `biodwh2`
+
 ## Help
 ~~~
 Usage: BioDWH2-ArcadeDB-Server.jar [-h] [-c <workspacePath>] [-cs <workspacePath>]
