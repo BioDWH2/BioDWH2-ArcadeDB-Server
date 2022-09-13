@@ -6,7 +6,7 @@
 
     <groupId>de.unibi.agbi.biodwh2.arcadedb.server</groupId>
     <artifactId>BioDWH2-ArcadeDB-Server</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <build>
         <finalName>BioDWH2-ArcadeDB-Server-v${project.version}</finalName>
