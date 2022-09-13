@@ -16,6 +16,8 @@ import de.unibi.agbi.biodwh2.core.model.graph.IndexDescription;
 import de.unibi.agbi.biodwh2.core.model.graph.Node;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +55,7 @@ public class ArcadeDBService {
             LOGGER.info("Starting ArcadeDB DBMS on localhost:" + port + "...");
         server = new ArcadeDBServer(getServerConfig(port));
         server.start();
+        createBioDWH2UserIfNotExists();
     }
 
     private String validatePort(String port) {
@@ -84,6 +87,20 @@ public class ArcadeDBService {
         config.setValue(GlobalConfiguration.SERVER_ROOT_PASSWORD, "biodwh2-arcadedb");
         config.setValue(GlobalConfiguration.SERVER_ROOT_PATH, databasePath);
         return config;
+    }
+
+    private void createBioDWH2UserIfNotExists() {
+        if (!server.getSecurity().existsUser("biodwh2")) {
+            final JSONObject user = new JSONObject();
+            user.put("name", "biodwh2");
+            user.put("password", server.getSecurity().encodePassword("biodwh2"));
+            final JSONObject databases = new JSONObject();
+            final JSONArray databasePrivilege = new JSONArray();
+            databasePrivilege.put("admin");
+            databases.put("*", databasePrivilege);
+            user.put("databases", databases);
+            server.getSecurity().createUser(user);
+        }
     }
 
     public void stopArcadeDBService() {
