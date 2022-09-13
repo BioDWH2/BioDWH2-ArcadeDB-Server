@@ -232,6 +232,7 @@ public class ArcadeDBService {
                         if (value != null)
                             arcadeEdge.set(propertyKey, value);
                     }
+                arcadeEdge.save();
             }
         }
     }
