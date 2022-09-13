@@ -30,7 +30,7 @@ jobs:
           java-version: 11
       - name: Build with Maven
         env:
-          USENAME: ${{ github.actor }}
+          USERNAME: ${{ github.actor }}
           PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: mvn package -DskipTests --file src/pom.xml --settings src/settings.xml
       - name: Upload Release Asset
