@@ -122,25 +122,26 @@ public class ArcadeDBService {
 
     private void createNodes(final DatabaseInternal db, final Graph graph,
                              final HashMap<Long, RID> nodeIdArcadeDBIdMap) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Creating node definitions...");
-        for (final String label : graph.getNodeLabels()) {
+        final String[] labels = graph.getNodeLabels();
+        for (int i = 0; i < labels.length; i++) {
+            final String label = labels[i];
+            if (LOGGER.isInfoEnabled())
+                LOGGER.info("Creating nodes with label '" + label + "' (" + (i + 1) + "/" + labels.length + ")...");
+            // Create a node definition for the label
             final VertexType definition = db.getSchema().createVertexType(label);
             final Map<String, de.unibi.agbi.biodwh2.core.lang.Type> propertyKeyTypes = graph.getPropertyKeyTypesForNodeLabel(
                     label);
             for (final String key : propertyKeyTypes.keySet())
                 if (!Node.IGNORED_FIELDS.contains(key))
                     definition.createProperty(key, getTypeByPropertyType(propertyKeyTypes.get(key)));
-        }
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Creating nodes...");
-        for (final Node node : graph.getNodes()) {
-            final String label = node.getLabel();
-            final MutableVertex arcadeNode = db.newVertex(label).modify();
-            for (final String propertyKey : node.keySet())
-                setPropertySafe(node, arcadeNode, propertyKey);
-            final RID id = arcadeNode.save().getIdentity();
-            nodeIdArcadeDBIdMap.put(node.getId(), id);
+            // Create the actual nodes
+            for (final Node node : graph.getNodes(label)) {
+                final MutableVertex arcadeNode = db.newVertex(label).modify();
+                for (final String propertyKey : node.keySet())
+                    setPropertySafe(node, arcadeNode, propertyKey);
+                final RID id = arcadeNode.save().getIdentity();
+                nodeIdArcadeDBIdMap.put(node.getId(), id);
+            }
         }
     }
 
@@ -205,30 +206,33 @@ public class ArcadeDBService {
 
     private void createEdges(final DatabaseInternal db, final Graph graph,
                              final HashMap<Long, RID> nodeIdArcadeDBIdMap) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Creating edge definitions...");
-        for (final String label : graph.getEdgeLabels()) {
+        final String[] labels = graph.getEdgeLabels();
+        for (int i = 0; i < labels.length; i++) {
+            final String label = labels[i];
+            if (LOGGER.isInfoEnabled())
+                LOGGER.info("Creating edges with label '" + label + "' (" + (i + 1) + "/" + labels.length + ")...");
+            // Create an edge definition for the label
             final EdgeType definition = db.getSchema().createEdgeType(label);
             final Map<String, de.unibi.agbi.biodwh2.core.lang.Type> propertyKeyTypes = graph.getPropertyKeyTypesForEdgeLabel(
                     label);
             for (final String key : propertyKeyTypes.keySet())
                 if (!Edge.IGNORED_FIELDS.contains(key))
                     definition.createProperty(key, getTypeByPropertyType(propertyKeyTypes.get(key)));
-        }
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Creating edges...");
-        for (final Edge edge : graph.getEdges()) {
-            final Vertex fromNode = db.lookupByRID(nodeIdArcadeDBIdMap.get(edge.getFromId()), false).asVertex(false);
-            final RID toNodeId = nodeIdArcadeDBIdMap.get(edge.getToId());
-            final MutableEdge arcadeEdge = fromNode.newEdge(edge.getLabel(), toNodeId, false).modify();
-            for (final String propertyKey : edge.keySet())
-                if (!Edge.IGNORED_FIELDS.contains(propertyKey)) {
-                    Object value = edge.getProperty(propertyKey);
-                    if (value instanceof Collection)
-                        value = convertCollectionToArray((Collection<?>) value);
-                    if (value != null)
-                        arcadeEdge.set(propertyKey, value);
-                }
+            // Create the actual edges
+            for (final Edge edge : graph.getEdges(label)) {
+                final Vertex fromNode = db.lookupByRID(nodeIdArcadeDBIdMap.get(edge.getFromId()), false).asVertex(
+                        false);
+                final RID toNodeId = nodeIdArcadeDBIdMap.get(edge.getToId());
+                final MutableEdge arcadeEdge = fromNode.newEdge(edge.getLabel(), toNodeId, false).modify();
+                for (final String propertyKey : edge.keySet())
+                    if (!Edge.IGNORED_FIELDS.contains(propertyKey)) {
+                        Object value = edge.getProperty(propertyKey);
+                        if (value instanceof Collection)
+                            value = convertCollectionToArray((Collection<?>) value);
+                        if (value != null)
+                            arcadeEdge.set(propertyKey, value);
+                    }
+            }
         }
     }
 
