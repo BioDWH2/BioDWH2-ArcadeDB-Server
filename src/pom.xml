@@ -104,7 +104,7 @@
         <dependency>
             <groupId>com.arcadedb</groupId>
             <artifactId>arcadedb-server</artifactId>
-            <version>22.8.1</version>
+            <version>22.12.1</version>
         </dependency>
         <dependency>
             <groupId>com.arcadedb</groupId>
