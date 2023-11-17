@@ -2,12 +2,11 @@ package de.unibi.agbi.biodwh2.arcadedb.server;
 
 import com.arcadedb.log.LogManager;
 import com.arcadedb.log.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.logging.Level;
 
 class InjectionLogger implements Logger {
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ArcadeDBService.class);
+    private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ArcadeDBService.class);
 
     public static void inject() {
         LogManager.instance().setLogger(new InjectionLogger());

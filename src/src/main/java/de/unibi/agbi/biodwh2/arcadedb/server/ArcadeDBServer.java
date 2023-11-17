@@ -3,8 +3,8 @@ package de.unibi.agbi.biodwh2.arcadedb.server;
 import de.unibi.agbi.biodwh2.core.net.BioDWH2Updater;
 import de.unibi.agbi.biodwh2.arcadedb.server.model.CmdArgs;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
 
 import java.io.FileWriter;
@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ArcadeDBServer {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArcadeDBServer.class);
+    private static final Logger LOGGER = LogManager.getLogger(ArcadeDBServer.class);
 
     private ArcadeDBServer() {
     }

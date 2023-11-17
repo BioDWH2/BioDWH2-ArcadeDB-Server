@@ -4,12 +4,15 @@ import com.arcadedb.ContextConfiguration;
 import com.arcadedb.GlobalConfiguration;
 import com.arcadedb.database.DatabaseInternal;
 import com.arcadedb.database.RID;
+import com.arcadedb.engine.ComponentFile;
 import com.arcadedb.graph.MutableEdge;
 import com.arcadedb.graph.MutableVertex;
 import com.arcadedb.graph.Vertex;
 import com.arcadedb.index.IndexException;
 import com.arcadedb.index.lsm.LSMTreeIndexAbstract;
 import com.arcadedb.schema.*;
+import com.arcadedb.serializer.json.JSONArray;
+import com.arcadedb.serializer.json.JSONObject;
 import com.arcadedb.server.ArcadeDBServer;
 import de.unibi.agbi.biodwh2.core.model.graph.Edge;
 import de.unibi.agbi.biodwh2.core.model.graph.Graph;
@@ -17,10 +20,8 @@ import de.unibi.agbi.biodwh2.core.model.graph.IndexDescription;
 import de.unibi.agbi.biodwh2.core.model.graph.Node;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.io.IOException;
@@ -38,7 +39,7 @@ import java.util.Map;
  * <a href="https://docs.arcadedb.com/#Embed-Server">ArcadeDB Embedded Server</a>
  */
 public class ArcadeDBService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArcadeDBService.class);
+    private static final Logger LOGGER = LogManager.getLogger(ArcadeDBService.class);
 
     private final String workspacePath;
     private final Path databasePath;
@@ -124,7 +125,7 @@ public class ArcadeDBService {
     public void createDatabase() {
         if (LOGGER.isInfoEnabled())
             LOGGER.info("Creating ArcadeDB database...");
-        final DatabaseInternal db = server.createDatabase("BioDWH2");
+        final DatabaseInternal db = server.createDatabase("BioDWH2", ComponentFile.MODE.READ_WRITE);
         db.getConfiguration().setValue(GlobalConfiguration.BUCKET_DEFAULT_PAGE_SIZE, 1048576);
         try (Graph graph = new Graph(Paths.get(workspacePath, "sources/mapped.db"), true)) {
             Files.createDirectories(databasePath);
